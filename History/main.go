@@ -14,13 +14,13 @@ import (
 var handler *handlers.Repository
 
 func main() {
-	db, err := driver.NewConnection("host=localhost port=5432 dbname=temp_chat user=postgres password=1234")
+	db, err := driver.NewConnection("host=db port=5432 dbname=temp_chat user=postgres password=1234")
 	if err != nil {
 		log.Fatal("can not connect to database")
 	}
 	posrgreRepo := postgresrepo.NewPostgreRepo(db)
 	handler = handlers.NewHandler(posrgreRepo)
-	rabbitQueue, err := queue.InitQueue("amqp://guest:guest@localhost:5672/", "chat-history")
+	rabbitQueue, err := queue.InitQueue("amqp://guest:guest@rabbit:5672/", "chat-history")
 	if err != nil {
 		log.Fatal("faild to set up rabbitMQ")
 	}

@@ -1,0 +1,53 @@
+version : "3.9"
+services :
+  chat:
+    build: Chat/
+    container_name: chatapp
+    ports : 
+      - 8080:8080
+    networks:
+      - chat-network
+    depends_on:
+      - rabbit
+  rabbit:
+    image: rabbitmq:3-management-alpine
+    container_name: chatqueue
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - chat-rabbit-data:/var/lib/rabbitmq
+      - chat-rabbit-logs:/var/log/rabbitmq
+    networks:
+      - chat-network
+  history:
+    build: History/
+    container_name: chat-history
+    ports : 
+      - 8050:8050
+    networks:
+      - chat-network
+    depends_on:
+      - rabbit
+      - chat
+      - db
+  db:
+    image: postgres:15.2-alpine
+    container_name : chat-db
+    environment:
+       POSTGRES_USER : postgres
+       POSTGRES_PASSWORD : 1234
+       POSTGRES_DB : temp_chat
+    ports:
+      - 5432:5432
+    volumes:
+      - chat-database:/var/lib/postgresql/data/
+    networks:
+      - chat-network
+networks:
+  chat-network:
+    driver: bridge    
+volumes:
+  chat-rabbit-data:
+  chat-rabbit-logs:
+  chat-database:

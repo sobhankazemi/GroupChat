@@ -1,7 +1,7 @@
 # GroupChat
 
 ## Description
-#### this is a chat application written in golang and using rabbitMQ as message broker and Gorrila as websocker
+#### this is a chat application written in golang using rabbitMQ as message broker and Gorrila as websocket
 ## How It Works
 #### open a websocket connection on "localhost:8080/{room id}"
 #### message will broadcast to every body who is registered to the room
